@@ -499,6 +499,7 @@ const apkPath = path.join(publicDir, 'apk', 'GasyTalk.apk');
 const landingPath = path.join(publicDir, 'landing.html');
 
 app.use('/assets', express.static(path.join(publicDir, 'assets')));
+app.use('/site', express.static(path.join(publicDir, 'site'), { maxAge: '1h' }));
 
 app.get('/apk', (req, res) => {
   if (fs.existsSync(apkPath)) {
@@ -516,11 +517,17 @@ app.get('/', (req, res) => {
   <p><a href="/api/auth/me">Vérifier API</a></p></body></html>`);
 });
 
+app.get(['/faq', '/privacy', '/terms'], (req, res) => {
+  const file = path.join(publicDir, `${req.path.slice(1)}.html`);
+  if (fs.existsSync(file)) return res.sendFile(file);
+  res.redirect(307, '/');
+});
+
 app.use((req, res, next) => {
   if (req.method !== 'GET') return next();
   if (req.path.startsWith('/api') || req.path.startsWith('/files')) return next();
   if (req.path === '/' || req.path === '/apk') return next();
-  if (req.path.startsWith('/assets/')) return next();
+  if (req.path.startsWith('/assets/') || req.path.startsWith('/site/')) return next();
   res.redirect(307, '/');
 });
 

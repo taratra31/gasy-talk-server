@@ -2,151 +2,414 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-  <title>GasyTalk — Mianatra sy mifampiresaka</title>
-  <meta name="description" content="GasyTalk: app Android fiteny sy fifampiresahana. Télécharger l'APK gratuitement." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GasyTalk — Apprendre une langue en discutant</title>
+  <meta name="description" content="GasyTalk : application Android gratuite pour apprendre les langues en discutant, avec exercices adaptés à votre niveau. Téléchargez l'APK." />
+  <meta property="og:title" content="GasyTalk — Apprendre une langue en discutant" />
+  <meta property="og:description" content="Application Android gratuite : chat, vocabulaire et exercices IA pour progresser de A1 à C2." />
+  <meta property="og:type" content="website" />
   <link rel="icon" href="/assets/icon/favicon.png" />
-  <style>
-    :root { --teal: #249090; --teal-dark: #1b7373; --bg: #f4f8f8; --ink: #173232; --muted: #5c6f6f; }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg); color: var(--ink); line-height: 1.6;
-    }
-    .wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
-
-    /* ---------- Header ---------- */
-    header {
-      padding: 16px 0;
-      background: #fff;
-      border-bottom: 1px solid #e3ecec;
-      box-shadow: 0 2px 10px rgba(36, 144, 144, .06);
-      position: sticky; top: 0; z-index: 5;
-    }
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .brand img { width: 44px; height: 44px; border-radius: 12px; object-fit: cover; }
-    .brand .name { font-size: 22px; font-weight: 800; letter-spacing: .3px; }
-    .brand .name span { color: var(--teal); }
-    .brand .tag { font-size: 12px; color: var(--muted); }
-
-    /* ---------- Hero ---------- */
-    .hero {
-      text-align: center;
-      padding: 64px 20px 40px;
-      background:
-        radial-gradient(600px 300px at 85% -10%, rgba(36,144,144,.16), transparent 60%),
-        radial-gradient(500px 260px at 10% 0%, rgba(36,144,144,.12), transparent 55%),
-        #fff;
-    }
-    .hero .logo { width: 96px; height: 96px; border-radius: 26px; object-fit: cover; box-shadow: 0 12px 30px rgba(36,144,144,.25); margin-bottom: 18px; }
-    .hero h1 { font-size: clamp(30px, 6vw, 46px); font-weight: 900; letter-spacing: .5px; }
-    .hero h1 span { color: var(--teal); }
-    .hero p { margin: 12px auto 26px; max-width: 560px; color: var(--muted); font-size: 17px; }
-
-    .btn-apk {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: var(--teal); color: #fff; text-decoration: none;
-      font-size: 18px; font-weight: 800; padding: 16px 34px; border-radius: 40px;
-      box-shadow: 0 10px 26px rgba(36,144,144,.35);
-      transition: transform .15s ease, background .15s ease;
-    }
-    .btn-apk:hover { background: var(--teal-dark); transform: translateY(-2px); }
-    .btn-apk .ic { font-size: 22px; }
-    .hero .note { margin-top: 14px; font-size: 13px; color: var(--muted); }
-    .hero .note b { color: var(--teal); }
-
-    /* ---------- Features ---------- */
-    .features { padding: 48px 0; }
-    .features h2 { text-align: center; font-size: 26px; margin-bottom: 30px; }
-    .grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 18px;
-    }
-    .card {
-      background: #fff; border-radius: 18px; padding: 22px;
-      border: 1px solid #e7f0f0; box-shadow: 0 6px 18px rgba(36,144,144,.07);
-    }
-    .card .emoji { font-size: 28px; }
-    .card h3 { font-size: 17px; margin: 10px 0 6px; color: var(--teal-dark); }
-    .card p { font-size: 14px; color: var(--muted); }
-
-    /* ---------- Steps ---------- */
-    .steps { padding: 40px 0 64px; }
-    .steps h2 { text-align: center; font-size: 26px; margin-bottom: 30px; }
-    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-    .step { background: #fff; border-radius: 16px; padding: 20px; text-align: center; border: 1px solid #e7f0f0; }
-    .step .num {
-      width: 34px; height: 34px; margin: 0 auto 10px; border-radius: 50%;
-      background: var(--teal); color: #fff; font-weight: 800; line-height: 34px; font-size: 16px;
-    }
-    .step h3 { font-size: 15px; margin-bottom: 6px; }
-    .step p { font-size: 13px; color: var(--muted); }
-
-    /* ---------- CTA bottom ---------- */
-    .cta { text-align: center; padding: 36px 20px 56px; }
-    .cta .btn-apk { font-size: 20px; }
-
-    /* ---------- Footer ---------- */
-    footer {
-      border-top: 1px solid #e3ecec; padding: 22px 0 34px; text-align: center;
-      color: var(--muted); font-size: 13px; background: #fff;
-    }
-    footer a { color: var(--teal); text-decoration: none; font-weight: 600; }
-  </style>
+  <link rel="stylesheet" href="/site/site.css" />
 </head>
 <body>
+  <a class="skip" href="#main">Aller au contenu</a>
 
-  <header>
-    <div class="wrap brand">
-      <img src="/assets/logo/logogasy.png" alt="GasyTalk" />
-      <div>
-        <div class="name">Gasy<span>Talk</span></div>
-        <div class="tag">Mianatra sy mifampiresaka — aplikasiona Android</div>
-      </div>
+  <header class="header">
+    <div class="wrap header-inner">
+      <a class="brand" href="/">
+        <img src="/assets/logo/logogasy.png" alt="GasyTalk" />
+        <div>
+          <div class="brand-name">Gasy<span>Talk</span></div>
+          <div class="brand-tag" data-i18n="brand.tag">Mianatra sy mifampiresaka</div>
+        </div>
+      </a>
+
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+
+      <nav class="nav">
+        <a href="/#features" data-i18n="nav.features">Fonctionnalités</a>
+        <a href="/#who" data-i18n="nav.who">Pour qui ?</a>
+        <a href="/#how" data-i18n="nav.how">Comment ça marche</a>
+        <a href="/faq" data-i18n="nav.faq">FAQ</a>
+        <a href="/privacy" data-i18n="nav.privacy">Confidentialité</a>
+        <a href="/terms" data-i18n="nav.terms">Conditions</a>
+        <div class="lang-switch" role="group" aria-label="Langue">
+          <button class="lang-btn" data-lang="fr" aria-pressed="true">FR</button>
+          <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <a class="btn btn-primary btn-sm header-cta" href="/apk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+          <span data-i18n="nav.download">Télécharger l'APK</span>
+        </a>
+      </nav>
     </div>
   </header>
 
-  <section class="hero">
+  <main id="main">
+
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-grid">
+          <div>
+            <span class="pill"><span class="dot"></span><span data-i18n="hero.badge">Android · Gratuit · Sans publicité</span></span>
+            <h1 data-i18n-html="hero.title">Apprenez une langue,<br><span class="grad">tout en discutant</span></h1>
+            <p class="hero-sub" data-i18n="hero.sub">GasyTalk est l'application Android qui transforme vos conversations en leçons. Écrivez, recevez des corrections et progressez niveau par niveau, gratuitement.</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary btn-lg" href="/apk">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+                <span data-i18n="hero.cta1">Télécharger l'APK</span>
+              </a>
+              <a class="btn btn-ghost btn-lg" href="#how">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7V5z"/></svg>
+                <span data-i18n="hero.cta2">Voir comment ça marche</span>
+              </a>
+            </div>
+            <div class="hero-trust">
+              <span class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="hero.trust1">Aucune inscription par email marketing</span></span>
+              <span class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg><span data-i18n="hero.trust2">Données en Europe</span></span>
+              <span class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg><span data-i18n="hero.trust3">Léger et rapide</span></span>
+              <span class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5m0 14h16M8 15l3-4 3 2 4-6"/></svg><span data-i18n="hero.trust4">Niveaux A1 à C2</span></span>
+            </div>
+          </div>
+
+          <div class="illustration">
+            <svg viewBox="0 0 420 360" role="img" aria-label="Deux apprenants échangent des messages dans l'application GasyTalk">
+              <defs>
+                <linearGradient id="gBg" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#ffffff" />
+                  <stop offset="1" stop-color="#e9f6f5" />
+                </linearGradient>
+                <linearGradient id="gTeal" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#2ba3a2" />
+                  <stop offset="1" stop-color="#186f6f" />
+                </linearGradient>
+                <linearGradient id="gSkin1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#f6d3b4" /><stop offset="1" stop-color="#e8b894" />
+                </linearGradient>
+                <linearGradient id="gSkin2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#c98f63" /><stop offset="1" stop-color="#a9714a" />
+                </linearGradient>
+                <linearGradient id="gHair" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#2c3b44" /><stop offset="1" stop-color="#1a242b" />
+                </linearGradient>
+              </defs>
+
+              <rect x="8" y="8" width="404" height="344" rx="30" fill="url(#gBg)" />
+              <circle cx="352" cy="66" r="46" fill="#d8efed" />
+              <circle cx="58" cy="300" r="34" fill="#e2f3f1" />
+
+              <g>
+                <rect x="126" y="52" width="168" height="256" rx="26" fill="#fff" stroke="#d8e8e8" stroke-width="3" />
+                <rect x="126" y="52" width="168" height="34" rx="26" fill="url(#gTeal)" />
+                <rect x="126" y="70" width="168" height="16" fill="url(#gTeal)" />
+                <circle cx="146" cy="69" r="5" fill="#ffffff" opacity=".85" />
+                <circle cx="164" cy="69" r="5" fill="#ffffff" opacity=".6" />
+                <circle cx="182" cy="69" r="5" fill="#ffffff" opacity=".4" />
+                <rect x="188" y="62" width="86" height="14" rx="7" fill="#ffffff" opacity=".22" />
+
+                <rect x="142" y="102" width="112" height="34" rx="14" fill="#eaf6f5" />
+                <text x="156" y="124" font-family="Inter,Arial" font-size="15" fill="#14625f">Bonjour !</text>
+
+                <rect x="166" y="146" width="112" height="34" rx="14" fill="url(#gTeal)" />
+                <text x="180" y="168" font-family="Inter,Arial" font-size="15" fill="#ffffff">Salut !</text>
+
+                <rect x="142" y="190" width="132" height="34" rx="14" fill="#eaf6f5" />
+                <text x="156" y="212" font-family="Inter,Arial" font-size="14" fill="#14625f">Comment ça ?</text>
+
+                <rect x="142" y="236" width="160" height="20" rx="10" fill="#f2f8f8" />
+                <rect x="142" y="236" width="96" height="20" rx="10" fill="#b6dedb" />
+                <circle cx="210" cy="246" r="6" fill="#fff" stroke="#249090" stroke-width="3" />
+                <rect x="142" y="272" width="136" height="10" rx="5" fill="#edf5f5" />
+                <rect x="142" y="288" width="104" height="10" rx="5" fill="#edf5f5" />
+              </g>
+
+              <g>
+                <ellipse cx="86" cy="196" rx="40" ry="42" fill="url(#gSkin1)" />
+                <path d="M46 194c0-30 20-48 40-48s40 18 40 48c0 6-10 4-14-4-6-14-16-18-26-18s-22 6-27 18c-4 8-13 10-13 4z" fill="url(#gHair)" />
+                <circle cx="72" cy="196" r="3.4" fill="#2c2b2b" />
+                <circle cx="100" cy="196" r="3.4" fill="#2c2b2b" />
+                <path d="M76 214c5 5 15 5 20 0" stroke="#c98f63" stroke-width="3" stroke-linecap="round" fill="none" />
+                <path d="M40 300c0-30 20-52 46-52s46 22 46 52z" fill="#249090" />
+                <path d="M86 250c-10 0-18 4-24 11 8 9 18 14 24 14s16-5 24-14c-6-7-14-11-24-11z" fill="#f6d3b4" />
+                <rect x="30" y="176" width="30" height="18" rx="9" fill="#1b7373" />
+                <path d="M60 194c2 8 4 12 6 15" stroke="#1b7373" stroke-width="4" stroke-linecap="round" fill="none" />
+              </g>
+
+              <g>
+                <ellipse cx="336" cy="212" rx="36" ry="38" fill="url(#gSkin2)" />
+                <path d="M300 206c0-26 16-42 36-42s36 16 36 42c0 4-12 2-14-8-4-12-12-16-22-16s-18 4-22 16c-2 10-14 12-14 8z" fill="url(#gHair)" />
+                <circle cx="323" cy="212" r="3.2" fill="#241d1a" />
+                <circle cx="349" cy="212" r="3.2" fill="#241d1a" />
+                <path d="M327 228c5 5 13 5 18 0" stroke="#8f5a3a" stroke-width="3" stroke-linecap="round" fill="none" />
+                <path d="M292 306c0-28 20-48 44-48s44 20 44 48z" fill="#1b7373" />
+                <path d="M336 260c-9 0-16 3-21 9 7 8 15 12 21 12s14-4 21-12c-5-6-12-9-21-9z" fill="#c98f63" />
+                <path d="M296 226l22-10-6 24" fill="#c98f63" />
+                <rect x="356" y="180" width="46" height="62" rx="12" fill="#fff" stroke="#d8e8e8" stroke-width="3" />
+                <rect x="364" y="192" width="30" height="6" rx="3" fill="#e2f0ef" />
+                <rect x="364" y="204" width="22" height="6" rx="3" fill="#e2f0ef" />
+                <rect x="364" y="216" width="26" height="6" rx="3" fill="#b6dedb" />
+              </g>
+
+              <g>
+                <rect x="252" y="112" width="86" height="30" rx="15" fill="#fff" stroke="#d8e8e8" stroke-width="2" />
+                <circle cx="270" cy="127" r="8" fill="#249090" />
+                <path d="M267 127l2 3 4-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                <rect x="284" y="122" width="44" height="6" rx="3" fill="#dceceb" />
+                <rect x="284" y="132" width="28" height="5" rx="2.5" fill="#eaf4f3" />
+              </g>
+            </svg>
+
+            <div class="float-chip c1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5m0 14h16M8 15l3-4 3 2 4-6"/></svg>
+              <span data-i18n="hero.chip1">Niveaux A1 → C2</span>
+            </div>
+            <div class="float-chip c2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9L12 3z"/></svg>
+              <span data-i18n="hero.chip2">Coach IA intégré</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat reveal"><div class="val" data-i18n="stat.1v">6</div><div class="lbl" data-i18n="stat.1l">Niveaux (A1–C2)</div></div>
+          <div class="stat reveal"><div class="val" data-i18n="stat.2v">2</div><div class="lbl" data-i18n="stat.2l">Langues d'interface</div></div>
+          <div class="stat reveal"><div class="val" data-i18n="stat.3v">100 %</div><div class="lbl" data-i18n="stat.3l">Gratuit</div></div>
+          <div class="stat reveal"><div class="val" data-i18n="stat.4v">≈ 7 Mo</div><div class="lbl" data-i18n="stat.4l">Taille de l'APK</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block alt" id="features">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-eyebrow" data-i18n="sec.features.eyebrow">Fonctionnalités</span>
+          <h2 data-i18n="sec.features.title">Tout ce qu'il faut pour progresser</h2>
+          <p data-i18n="sec.features.sub">Une application simple, pensée pour les gens qui veulent pratiquer, pas lire des théories.</p>
+        </div>
+
+        <div class="cards">
+          <div class="card reveal">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 01-8 8H8l-5 3 1.4-4.2A8 8 0 1121 12z"/></svg></div>
+            <h3 data-i18n="feat.1h">Chat entre apprenants</h3>
+            <p data-i18n="feat.1p">Échangez des messages avec d'autres personnes qui apprennent, et faites corriger vos phrases.</p>
+          </div>
+          <div class="card reveal">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 012-2h13v18H6a2 2 0 01-2-2V5z"/><path d="M4 17h15M8 7h7M8 11h5"/></svg></div>
+            <h3 data-i18n="feat.2h">Vocabulaire quotidien</h3>
+            <p data-i18n="feat.2p">Des listes de mots et d'expressions classées par thème, à réviser chaque jour.</p>
+          </div>
+          <div class="card reveal">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9L12 3z"/><path d="M18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9L18 15z"/></svg></div>
+            <h3 data-i18n="feat.3h">Exercices avec l'IA</h3>
+            <p data-i18n="feat.3p">Quiz, conjugaison et expression orale : l'IA vous propose des exercices adaptés à votre niveau.</p>
+          </div>
+          <div class="card reveal">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M8.5 13.5L7 22l5-2.6L17 22l-1.5-8.5"/></svg></div>
+            <h3 data-i18n="feat.4h">Niveaux A1 à C2</h3>
+            <p data-i18n="feat.4p">Du grand débutant au niveau avancé, chaque contenu correspond à votre niveau réel.</p>
+          </div>
+          <div class="card reveal">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"/></svg></div>
+            <h3 data-i18n="feat.5h">Interface FR et EN</h3>
+            <p data-i18n="feat.5p">L'application s'affiche en français ou en anglais, et vous apprenez la langue de votre choix.</p>
+          </div>
+          <div class="card reveal">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/><path d="M9.5 12l1.8 1.8L15 10"/></svg></div>
+            <h3 data-i18n="feat.6h">Vie privée</h3>
+            <p data-i18n="feat.6p">Vos conversations sont privées. Aucune donnée n'est revendue à des tiers.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="who">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-eyebrow" data-i18n="sec.who.eyebrow">Pour qui ?</span>
+          <h2 data-i18n="sec.who.title">Pour chaque apprenant</h2>
+          <p data-i18n="sec.who.sub">Choisissez votre niveau, l'application adapte les exercices et le vocabulaire.</p>
+        </div>
+
+        <div class="personas">
+          <div class="persona reveal">
+            <div class="ava"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg></div>
+            <div>
+              <h3 data-i18n="who.1h">Débutant</h3>
+              <span class="lvl" data-i18n="who.1l">A1 – A2</span>
+              <p data-i18n="who.1p">Vous avez peu ou pas de bases ? Les exercices commencent par des phrases simples et des mots courants.</p>
+            </div>
+          </div>
+          <div class="persona reveal">
+            <div class="ava"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg></div>
+            <div>
+              <h3 data-i18n="who.2h">Intermédiaire</h3>
+              <span class="lvl" data-i18n="who.2l">B1 – B2</span>
+              <p data-i18n="who.2p">Vous comprenez l'essentiel ? Enrichissez votre vocabulaire et améliorez votre aisance à l'écrit.</p>
+            </div>
+          </div>
+          <div class="persona reveal">
+            <div class="ava"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.6 6.3 6.8.5-5.2 4.4 1.6 6.6L12 16.3 6.2 19.8l1.6-6.6L2.6 8.8l6.8-.5L12 2z"/></svg></div>
+            <div>
+              <h3 data-i18n="who.3h">Avancé</h3>
+              <span class="lvl" data-i18n="who.3l">C1 – C2</span>
+              <p data-i18n="who.3p">Vous visez la maîtrise ? Travaillez les tournures complexes, le vocabulaire soutenu et l'oral.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block alt" id="how">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-eyebrow" data-i18n="sec.how.eyebrow">Comment ça marche</span>
+          <h2 data-i18n="sec.how.title">Installé en 3 étapes</h2>
+          <p data-i18n="sec.how.sub">Pas de compte à créer avant le téléchargement, pas de boutique à visiter.</p>
+        </div>
+
+        <div class="steps">
+          <div class="step reveal">
+            <h3 data-i18n="step.1h">Téléchargez l'APK</h3>
+            <p data-i18n="step.1p">Un seul fichier d'environ 7 Mo, disponible directement sur cette page.</p>
+            <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg><span data-i18n="step.1b">Android 7.0 et plus</span></span>
+          </div>
+          <div class="step reveal">
+            <h3 data-i18n="step.2h">Installez l'application</h3>
+            <p data-i18n="step.2p">Ouvrez le fichier téléchargé et autorisez l'installation depuis cette source.</p>
+            <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-i18n="step.2b">Installation en 1 minute</span></span>
+          </div>
+          <div class="step reveal">
+            <h3 data-i18n="step.3h">Créez votre compte</h3>
+            <p data-i18n="step.3p">Indiquez votre email, votre niveau et la langue que vous apprenez. C'est tout.</p>
+            <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="step.3b">Gratuit et illimité</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="faq">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-eyebrow" data-i18n="sec.faq.eyebrow">Questions fréquentes</span>
+          <h2 data-i18n="sec.faq.title">Tout ce qu'il faut savoir</h2>
+          <p data-i18n="sec.faq.sub">Les questions que l'on nous pose le plus souvent avant de télécharger l'application.</p>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq-item reveal">
+            <button class="faq-q" aria-expanded="false">
+              <span data-i18n="faq.1q">L'application est-elle vraiment gratuite ?</span>
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="faq-a"><div class="inner" data-i18n="faq.1a">Oui. Le téléchargement de l'APK est gratuit et l'application peut être utilisée sans payer. Aucune carte bancaire n'est demandée.</div></div>
+          </div>
+          <div class="faq-item reveal">
+            <button class="faq-q" aria-expanded="false">
+              <span data-i18n="faq.2q">Comment obtenir et installer l'APK ?</span>
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="faq-a"><div class="inner" data-i18n="faq.2a">Appuyez sur le bouton de téléchargement, ouvrez le fichier sur votre téléphone Android, puis autorisez « Sources inconnues » pour l'application qui ouvre le fichier. L'installation prend moins d'une minute.</div></div>
+          </div>
+          <div class="faq-item reveal">
+            <button class="faq-q" aria-expanded="false">
+              <span data-i18n="faq.3q">Pourquoi un code de vérification (OTP) est-il demandé ?</span>
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="faq-a"><div class="inner" data-i18n="faq.3a">Le code à six chiffres sert à confirmer que vous êtes propriétaire de l'adresse email utilisée. C'est une mesure de sécurité classique pour protéger votre compte.</div></div>
+          </div>
+          <div class="faq-item reveal">
+            <button class="faq-q" aria-expanded="false">
+              <span data-i18n="faq.4q">Puis-je changer de niveau ou de langue ?</span>
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="faq-a"><div class="inner" data-i18n="faq.4a">Oui. Le niveau et la langue d'apprentissage sont modifiables depuis les paramètres de l'application.</div></div>
+          </div>
+          <div class="faq-item reveal">
+            <button class="faq-q" aria-expanded="false">
+              <span data-i18n="faq.6q">Mes messages dans le chat sont-ils publics ?</span>
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="faq-a"><div class="inner" data-i18n="faq.6a">Non. Chaque conversation est privée entre vous et la personne avec qui vous échangez. Rien n'est publié et aucune donnée n'est revendue.</div></div>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin-top:26px">
+          <a class="btn btn-ghost" href="/faq">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 114 2c-.9.7-1.5 1.2-1.5 2.5M12 17.5h.01"/></svg>
+            <span data-i18n="cta.alt">Lire la FAQ</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="block alt">
+      <div class="wrap">
+        <div class="cta reveal">
+          <h2 data-i18n="cta.title">Prêt à commencer votre première conversation ?</h2>
+          <p data-i18n="cta.sub">Téléchargez l'application, créez votre compte et découvrez votre niveau. C'est gratuit et ça prend moins de deux minutes.</p>
+          <div class="cta-actions">
+            <a class="btn btn-lg btn-white" href="/apk">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+              <span data-i18n="cta.button">Télécharger l'APK</span>
+            </a>
+            <a class="btn btn-lg btn-ghost-w" href="/privacy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>
+              <span data-i18n="nav.privacy">Confidentialité</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
     <div class="wrap">
-      <img class="logo" src="/assets/logo/logogasy.png" alt="GasyTalk logo" />
-      <h1>Mianatra <span>fiteny</span> sy miresaka<br />ao anaty zotra tsotra</h1>
-      <p>
-        GasyTalk dia aplikasiona Android hanampiana anao hianatra teny vahiny,
-        hanao exercices miaraka amin'ny AI, ary hifampiresaka amin'ny hafa — free ary tsotra.
-      </p>
-      <a class="btn-apk" href="/apk"><span class="ic">📲</span> Télécharger l'APK</a>
-      <div class="note">Android · <b>gratuit</b> · miscaraina fotsiny ny file APK (≈ 7 Mo)</div>
-    </div>
-  </section>
-
-  <section class="features wrap">
-    <h2>Inona no atolotra</h2>
-    <div class="grid">
-      <div class="card"><div class="emoji">💬</div><h3>Chat fiaraha-miteny</h3><p>Miresaha sy mifamaly amin'ny olona hafa mampiasa GasyTalk.</p></div>
-      <div class="card"><div class="emoji">📚</div><h3>Vocabulaire</h3><p>Liste isan-karazany hanankarena ny rakibolanao isan'andro.</p></div>
-      <div class="card"><div class="emoji">🤖</div><h3>Exercices AI</h3><p>Quiz sy speaking novokarin'ny AI — misafidy niveau sy mode ianao.</p></div>
-      <div class="card"><div class="emoji">💎</div><h3>Abonnement</h3><p>Raharahaina tanteraka anaty app ny abonnement sy ny fandoavana.</p></div>
-    </div>
-  </section>
-
-  <section class="steps wrap">
-    <h2>Fomba 3 dingana</h2>
-    <div class="steps-grid">
-      <div class="step"><div class="num">1</div><h3>Alao ny APK</h3><p>Tsindrio ny button etsy ambany ary alaivo ny file.</p></div>
-      <div class="step"><div class="num">2</div><h3>Ampidiro</h3><p>Velomy ny file ary "Install" — avelao ny "unknown sources".</p></div>
-      <div class="step"><div class="num">3</div><h3>Midira</h3><p>Anatiny ny kaontinao (na hamorona vaovao) ary raiso ho malalaka!</p></div>
-    </div>
-  </section>
-
-  <section class="cta wrap">
-    <a class="btn-apk" href="/apk"><span class="ic">📲</span> Télécharger l'APK</a>
-  </section>
-
-  <footer>
-    <div class="wrap">
-      GasyTalk © 2026 — Andriantsoa <a href="https://github.com/taratra31/gasy-talk-server" target="_blank" rel="noopener">ny projet open-source</a>
+      <div class="footer-grid">
+        <div>
+          <a class="brand" href="/">
+            <img src="/assets/logo/logogasy.png" alt="GasyTalk" />
+            <div>
+              <div class="brand-name">Gasy<span>Talk</span></div>
+              <div class="brand-tag" data-i18n="brand.tag">Mianatra sy mifampiresaka</div>
+            </div>
+          </a>
+          <p style="margin-top:14px" data-i18n="footer.about">GasyTalk est une application Android gratuite pour apprendre les langues en discutant, avec des exercices adaptés à votre niveau.</p>
+        </div>
+        <div>
+          <h4 data-i18n="footer.product">Produit</h4>
+          <ul>
+            <li><a href="/#features" data-i18n="nav.features">Fonctionnalités</a></li>
+            <li><a href="/#how" data-i18n="nav.how">Comment ça marche</a></li>
+            <li><a href="/#who" data-i18n="nav.who">Pour qui ?</a></li>
+            <li><a href="/apk" data-i18n="nav.download">Télécharger l'APK</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 data-i18n="footer.legal">Informations légales</h4>
+          <ul>
+            <li><a href="/privacy" data-i18n="footer.privacy">Confidentialité</a></li>
+            <li><a href="/terms" data-i18n="footer.terms">Conditions d'utilisation</a></li>
+            <li><a href="/faq" data-i18n="footer.faq">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> GasyTalk. <span data-i18n="footer.rights">Tous droits réservés.</span></span>
+        <span style="display:inline-flex;align-items:center;gap:7px">
+          <span data-i18n="footer.built">Projet open source</span>
+          <span class="socials">
+            <a href="https://github.com/taratra31/gasy-talk-server" target="_blank" rel="noopener" aria-label="GitHub">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48l-.01-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.35 1.09 2.92.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85l-.01 2.75c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>
+            </a>
+          </span>
+        </span>
+      </div>
     </div>
   </footer>
 
+  <script src="/site/site.js"></script>
 </body>
 </html>
