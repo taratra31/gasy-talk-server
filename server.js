@@ -499,7 +499,7 @@ const apkPath = path.join(publicDir, 'apk', 'GasyTalk.apk');
 const landingPath = path.join(publicDir, 'landing.html');
 
 app.use('/assets', express.static(path.join(publicDir, 'assets')));
-app.use('/site', express.static(path.join(publicDir, 'site'), { maxAge: '1h' }));
+app.use('/site', express.static(path.join(publicDir, 'site'), { etag: true, lastModified: true }));
 
 app.get('/apk', (req, res) => {
   if (fs.existsSync(apkPath)) {
