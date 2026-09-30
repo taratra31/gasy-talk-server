@@ -15,11 +15,11 @@
   <header class="header">
     <div class="wrap header-inner">
       <a class="brand" href="/">
-        <img src="/assets/logo/logogasy.png" alt="GasyTalk" />
-        <div>
-          <div class="brand-name">Gasy<span>Talk</span></div>
-          <div class="brand-tag" data-i18n="brand.tag">Mianatra sy mifampiresaka</div>
-        </div>
+        <span class="brand-mark"><img src="/assets/logo/logogasy-mark.png" alt="GasyTalk" /></span>
+        <span class="brand-text">
+          <span class="brand-name">Gasy<span>Talk</span></span>
+          <span class="brand-tag" data-i18n="brand.tag">Mianatra sy mifampiresaka</span>
+        </span>
       </a>
 
       <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
@@ -27,17 +27,20 @@
       </button>
 
       <nav class="nav">
+        <div class="nav-links">
         <a href="/#features" data-i18n="nav.features">Fonctionnalités</a>
         <a href="/#who" data-i18n="nav.who">Pour qui ?</a>
         <a href="/#how" data-i18n="nav.how">Comment ça marche</a>
         <a href="/faq" data-i18n="nav.faq">FAQ</a>
         <a href="/privacy" data-i18n="nav.privacy">Confidentialité</a>
         <a href="/terms" data-i18n="nav.terms">Conditions</a>
+        </div>
         <div class="lang-switch" role="group" aria-label="Langue">
+          <svg class="globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"/></svg>
           <button class="lang-btn" data-lang="fr" aria-pressed="true">FR</button>
           <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
         </div>
-        <a class="btn btn-primary btn-sm header-cta" href="/apk">
+        <a class="btn btn-primary btn-sm nav-cta" href="/apk">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
           <span data-i18n="nav.download">Télécharger l'APK</span>
         </a>

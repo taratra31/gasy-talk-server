@@ -406,6 +406,48 @@
     });
   }
 
+  function initSpy() {
+    var links = Array.prototype.slice.call(document.querySelectorAll(".nav-links a"));
+    if (!links.length) return;
+
+    var bySection = {};
+    var sections = [];
+    var pageLink = null;
+
+    links.forEach(function (a) {
+      var href = a.getAttribute("href") || "";
+      var hashAt = href.indexOf("#");
+      if (hashAt > 0) {
+        var sec = document.getElementById(href.slice(hashAt + 1));
+        if (sec) { bySection[sec.id] = a; sections.push(sec); }
+      } else if (hashAt === 0) {
+        var sec2 = document.getElementById(href.slice(1));
+        if (sec2) { bySection[sec2.id] = a; sections.push(sec2); }
+      } else if (href === location.pathname) {
+        pageLink = a;
+      }
+    });
+
+    var setActive = function (a) {
+      links.forEach(function (l) { l.classList.remove("active"); });
+      if (a) a.classList.add("active");
+    };
+
+    if (pageLink) { setActive(pageLink); return; }
+    if (!sections.length) return;
+
+    var update = function () {
+      if (window.scrollY < 60) return setActive(null);
+      var pos = window.scrollY + 150;
+      var current = null;
+      sections.forEach(function (s) { if (s.offsetTop <= pos) current = s.id; });
+      setActive(bySection[current] || null);
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+  }
+
   function initReveal() {
     var items = document.querySelectorAll(".reveal");
     if (!items.length) return;
@@ -438,6 +480,7 @@
     initLang();
     initHeader();
     initFaq();
+    initSpy();
     initReveal();
     initYear();
   });
