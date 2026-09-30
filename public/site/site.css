@@ -55,13 +55,13 @@ a { color: var(--teal); }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); flex-shrink: 0; }
 .brand-mark {
   width: 46px; height: 46px; border-radius: 14px; flex-shrink: 0;
-  background: #249090;
+  background: #249090; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 10px 22px rgba(36, 144, 144, .3);
   transition: transform .18s ease, box-shadow .18s ease;
 }
 .brand:hover .brand-mark { transform: translateY(-1px) rotate(-3deg); box-shadow: 0 14px 28px rgba(36, 144, 144, .38); }
-.brand-mark img { max-width: 74%; height: auto; object-fit: contain; filter: brightness(0) invert(1); }
+.brand-mark img { width: 200%; max-width: none; height: auto; object-fit: contain; filter: brightness(0) invert(1); }
 .brand-text { display: flex; flex-direction: column; line-height: 1.12; }
 .brand-name { font-size: 20px; font-weight: 850; letter-spacing: -.4px; }
 .brand-name span { color: var(--teal); }
