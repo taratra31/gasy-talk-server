@@ -496,6 +496,9 @@ app.use(function errHandler(err, req, res, next) {
    ============================================================ */
 const publicDir = path.join(__dirname, 'public');
 const apkPath = path.join(publicDir, 'apk', 'GasyTalk.apk');
+const landingPath = path.join(publicDir, 'landing.html');
+
+app.use('/assets', express.static(path.join(publicDir, 'assets')));
 
 app.get('/apk', (req, res) => {
   if (fs.existsSync(apkPath)) {
@@ -505,23 +508,20 @@ app.get('/apk', (req, res) => {
   }
 });
 
-app.use(express.static(publicDir, { index: false }));
-
 app.get('/', (req, res) => {
-  const index = path.join(publicDir, 'index.html');
-  if (fs.existsSync(index)) return res.sendFile(index);
-  res.type('html').send(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>GasyTalk API</title></head><body style="font-family:sans-serif;text-align:center;padding:40px">
-  <h1>✅ GasyTalk API serveur mandeha</h1>
-  <p><a href="/apk">📲 Télécharger l'APK GasyTalk</a></p>
+  if (fs.existsSync(landingPath)) return res.sendFile(landingPath);
+  res.type('html').send(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>GasyTalk</title></head><body style="font-family:sans-serif;text-align:center;padding:40px">
+  <h1>✅ GasyTalk</h1>
+  <p><a href="/apk">📲 Télécharger l'APK</a></p>
   <p><a href="/api/auth/me">Vérifier API</a></p></body></html>`);
 });
 
 app.use((req, res, next) => {
   if (req.method !== 'GET') return next();
   if (req.path.startsWith('/api') || req.path.startsWith('/files')) return next();
-  const index = path.join(publicDir, 'index.html');
-  if (fs.existsSync(index)) return res.sendFile(index);
-  next();
+  if (req.path === '/' || req.path === '/apk') return next();
+  if (req.path.startsWith('/assets/')) return next();
+  res.redirect(307, '/');
 });
 
 app.listen(PORT, () => {

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+  <title>GasyTalk — Mianatra sy mifampiresaka</title>
+  <meta name="description" content="GasyTalk: app Android fiteny sy fifampiresahana. Télécharger l'APK gratuitement." />
+  <link rel="icon" href="/assets/icon/favicon.png" />
+  <style>
+    :root { --teal: #249090; --teal-dark: #1b7373; --bg: #f4f8f8; --ink: #173232; --muted: #5c6f6f; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg); color: var(--ink); line-height: 1.6;
+    }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+
+    /* ---------- Header ---------- */
+    header {
+      padding: 16px 0;
+      background: #fff;
+      border-bottom: 1px solid #e3ecec;
+      box-shadow: 0 2px 10px rgba(36, 144, 144, .06);
+      position: sticky; top: 0; z-index: 5;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand img { width: 44px; height: 44px; border-radius: 12px; object-fit: cover; }
+    .brand .name { font-size: 22px; font-weight: 800; letter-spacing: .3px; }
+    .brand .name span { color: var(--teal); }
+    .brand .tag { font-size: 12px; color: var(--muted); }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      text-align: center;
+      padding: 64px 20px 40px;
+      background:
+        radial-gradient(600px 300px at 85% -10%, rgba(36,144,144,.16), transparent 60%),
+        radial-gradient(500px 260px at 10% 0%, rgba(36,144,144,.12), transparent 55%),
+        #fff;
+    }
+    .hero .logo { width: 96px; height: 96px; border-radius: 26px; object-fit: cover; box-shadow: 0 12px 30px rgba(36,144,144,.25); margin-bottom: 18px; }
+    .hero h1 { font-size: clamp(30px, 6vw, 46px); font-weight: 900; letter-spacing: .5px; }
+    .hero h1 span { color: var(--teal); }
+    .hero p { margin: 12px auto 26px; max-width: 560px; color: var(--muted); font-size: 17px; }
+
+    .btn-apk {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--teal); color: #fff; text-decoration: none;
+      font-size: 18px; font-weight: 800; padding: 16px 34px; border-radius: 40px;
+      box-shadow: 0 10px 26px rgba(36,144,144,.35);
+      transition: transform .15s ease, background .15s ease;
+    }
+    .btn-apk:hover { background: var(--teal-dark); transform: translateY(-2px); }
+    .btn-apk .ic { font-size: 22px; }
+    .hero .note { margin-top: 14px; font-size: 13px; color: var(--muted); }
+    .hero .note b { color: var(--teal); }
+
+    /* ---------- Features ---------- */
+    .features { padding: 48px 0; }
+    .features h2 { text-align: center; font-size: 26px; margin-bottom: 30px; }
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      background: #fff; border-radius: 18px; padding: 22px;
+      border: 1px solid #e7f0f0; box-shadow: 0 6px 18px rgba(36,144,144,.07);
+    }
+    .card .emoji { font-size: 28px; }
+    .card h3 { font-size: 17px; margin: 10px 0 6px; color: var(--teal-dark); }
+    .card p { font-size: 14px; color: var(--muted); }
+
+    /* ---------- Steps ---------- */
+    .steps { padding: 40px 0 64px; }
+    .steps h2 { text-align: center; font-size: 26px; margin-bottom: 30px; }
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .step { background: #fff; border-radius: 16px; padding: 20px; text-align: center; border: 1px solid #e7f0f0; }
+    .step .num {
+      width: 34px; height: 34px; margin: 0 auto 10px; border-radius: 50%;
+      background: var(--teal); color: #fff; font-weight: 800; line-height: 34px; font-size: 16px;
+    }
+    .step h3 { font-size: 15px; margin-bottom: 6px; }
+    .step p { font-size: 13px; color: var(--muted); }
+
+    /* ---------- CTA bottom ---------- */
+    .cta { text-align: center; padding: 36px 20px 56px; }
+    .cta .btn-apk { font-size: 20px; }
+
+    /* ---------- Footer ---------- */
+    footer {
+      border-top: 1px solid #e3ecec; padding: 22px 0 34px; text-align: center;
+      color: var(--muted); font-size: 13px; background: #fff;
+    }
+    footer a { color: var(--teal); text-decoration: none; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap brand">
+      <img src="/assets/logo/logogasy.png" alt="GasyTalk" />
+      <div>
+        <div class="name">Gasy<span>Talk</span></div>
+        <div class="tag">Mianatra sy mifampiresaka — aplikasiona Android</div>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <img class="logo" src="/assets/logo/logogasy.png" alt="GasyTalk logo" />
+      <h1>Mianatra <span>fiteny</span> sy miresaka<br />ao anaty zotra tsotra</h1>
+      <p>
+        GasyTalk dia aplikasiona Android hanampiana anao hianatra teny vahiny,
+        hanao exercices miaraka amin'ny AI, ary hifampiresaka amin'ny hafa — free ary tsotra.
+      </p>
+      <a class="btn-apk" href="/apk"><span class="ic">📲</span> Télécharger l'APK</a>
+      <div class="note">Android · <b>gratuit</b> · miscaraina fotsiny ny file APK (≈ 7 Mo)</div>
+    </div>
+  </section>
+
+  <section class="features wrap">
+    <h2>Inona no atolotra</h2>
+    <div class="grid">
+      <div class="card"><div class="emoji">💬</div><h3>Chat fiaraha-miteny</h3><p>Miresaha sy mifamaly amin'ny olona hafa mampiasa GasyTalk.</p></div>
+      <div class="card"><div class="emoji">📚</div><h3>Vocabulaire</h3><p>Liste isan-karazany hanankarena ny rakibolanao isan'andro.</p></div>
+      <div class="card"><div class="emoji">🤖</div><h3>Exercices AI</h3><p>Quiz sy speaking novokarin'ny AI — misafidy niveau sy mode ianao.</p></div>
+      <div class="card"><div class="emoji">💎</div><h3>Abonnement</h3><p>Raharahaina tanteraka anaty app ny abonnement sy ny fandoavana.</p></div>
+    </div>
+  </section>
+
+  <section class="steps wrap">
+    <h2>Fomba 3 dingana</h2>
+    <div class="steps-grid">
+      <div class="step"><div class="num">1</div><h3>Alao ny APK</h3><p>Tsindrio ny button etsy ambany ary alaivo ny file.</p></div>
+      <div class="step"><div class="num">2</div><h3>Ampidiro</h3><p>Velomy ny file ary "Install" — avelao ny "unknown sources".</p></div>
+      <div class="step"><div class="num">3</div><h3>Midira</h3><p>Anatiny ny kaontinao (na hamorona vaovao) ary raiso ho malalaka!</p></div>
+    </div>
+  </section>
+
+  <section class="cta wrap">
+    <a class="btn-apk" href="/apk"><span class="ic">📲</span> Télécharger l'APK</a>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      GasyTalk © 2026 — Andriantsoa <a href="https://github.com/taratra31/gasy-talk-server" target="_blank" rel="noopener">ny projet open-source</a>
+    </div>
+  </footer>
+
+</body>
+</html>
