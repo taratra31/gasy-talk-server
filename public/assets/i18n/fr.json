@@ -1,0 +1,14 @@
+{
+  "MENU": {
+    "INVITE_FRIENDS": "Inviter des ami(e)s",
+    "SEE_FRIENDS": "Voir amis",
+    "LANGUAGE": "Français / English",
+    "PREMIUM": "Premium",
+    "MY_CONVERSATION": "Mes conversations",
+    "START_PRACTICE": "Commencer à pratiquer",
+    "LOGOUT": "Déconnexion"
+  },
+  "PROFILE": {
+    "VIEW_PROFILE": "Voir votre profil"
+  }
+}

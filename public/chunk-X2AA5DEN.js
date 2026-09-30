@@ -1,0 +1,1 @@
+import{a as s,h as i}from"./chunk-P2GX63AQ.js";var a=(()=>{let t=class t{constructor(){this.refreshSubject=new s,this.refresh$=this.refreshSubject.asObservable()}trigger(e=null){this.refreshSubject.next(e)}};t.\u0275fac=function(o){return new(o||t)},t.\u0275prov=i({token:t,factory:t.\u0275fac,providedIn:"root"});let r=t;return r})();export{a};

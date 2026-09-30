@@ -1,0 +1,20 @@
+{
+  "name": "gasy-talk-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend API PostgreSQL (Neon) for GasyTalk",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch --env-file=.env server.js"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
