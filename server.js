@@ -30,6 +30,80 @@ const fail = (res, status, message) => res.status(status).json({ data: null, err
 
 const uuidCols = new Set(['id', 'sender_id', 'receiver_id', 'user_id', 'msg_ids']);
 
+/* ================= Fiarovana: schema & identifiants ================= */
+const ALLOWED_TABLES = new Set(['profiles', 'payments', 'messages', 'notifications', 'avatars', 'voices']);
+const ALLOWED_BUCKETS = new Set(['avatars']);
+const HIDDEN_COLS = new Set(['password_hash']);
+const IDENT = /^[a-z_][a-z0-9_]*$/;
+const MAX_LIMIT = 1000;
+
+class HttpError extends Error {
+  constructor(status, message) { super(message); this.status = status; }
+}
+
+let colCache = { at: 0, tables: {} };
+
+async function assertTable(table) {
+  if (typeof table !== 'string' || !IDENT.test(table) || !ALLOWED_TABLES.has(table)) {
+    throw new HttpError(404, 'Table tsy fantatra');
+  }
+}
+
+async function tableColumns(table) {
+  if (Date.now() - colCache.at > 300000) colCache = { at: Date.now(), tables: {} };
+  if (!colCache.tables[table]) {
+    const r = await pool.query(
+      `select attname from pg_attribute
+        where attrelid = $1::regclass and attnum > 0 and not attisdropped`,
+      [table]
+    );
+    colCache.tables[table] = new Set(r.rows.map(x => x.attname));
+  }
+  return colCache.tables[table];
+}
+
+async function assertCols(table, cols) {
+  const list = [...new Set((cols || []).filter(Boolean))];
+  if (list.length === 0) return;
+  for (const c of list) {
+    if (HIDDEN_COLS.has(c)) throw new HttpError(400, `Colonne voarara: ${c}`);
+    if (!IDENT.test(c)) throw new HttpError(400, `Colonne tsy mety: ${c}`);
+  }
+  const set = await tableColumns(table);
+  for (const c of list) if (!set.has(c)) throw new HttpError(400, `Colonne tsy fantatra: ${c}`);
+}
+
+function scrub(row) {
+  if (!row || typeof row !== 'object') return row;
+  const out = { ...row };
+  for (const c of HIDDEN_COLS) delete out[c];
+  return out;
+}
+
+function parseFilters(filters) {
+  const arr = filters ? (Array.isArray(filters) ? filters.flatMap(x => String(x).split(';;')) : String(filters).split(';;')) : [];
+  return arr.filter(Boolean).map(s => {
+    const first = s.indexOf('|');
+    const col = s.slice(0, first);
+    const rest = s.slice(first + 1);
+    const second = rest.indexOf('|');
+    return { col, op: rest.slice(0, second), val: rest.slice(second + 1) };
+  });
+}
+
+function clampLimit(raw) {
+  const n = parseInt(raw, 10);
+  if (!Number.isFinite(n) || n <= 0) return null;
+  return Math.min(n, MAX_LIMIT);
+}
+
+const wrap = (fn) => (req, res) => {
+  Promise.resolve(fn(req, res)).catch(e => {
+    const code = e && e.status ? e.status : 500;
+    if (!res.headersSent) fail(res, code, code === 500 ? 'Server error' : e.message);
+  });
+};
+
 function typedParam(col, val, op) {
   if (op === 'in' || op === 'includes') return Array.isArray(val) ? val : [val];
   return val;
@@ -58,7 +132,7 @@ function parseOr(str) {
     while (clean[i] === ',' || clean[i] === ' ') i++;
     if (i >= clean.length) break;
     if (clean.startsWith('and(', i)) {
-      const end = findParen(clean, i + 4);
+      const end = findParen(clean, i + 3);
       if (end === -1) break;
       groups.push(parseAnd(clean.slice(i + 4, end)));
       i = end + 1;
@@ -115,15 +189,20 @@ function buildWhere(filters = [], orStr = null, startN = 1, prefix = null) {
     n++;
   }
 
-  for (const group of parseOr(orStr)) {
-    const conds = group.map(c => {
-      let v = c.val;
-      try { v = JSON.parse(v); } catch { /* keep string */ }
-      const cast = uuidCols.has(c.col) ? '::uuid' : '';
-      params.push(typedParam(c.col, v, c.op));
-      return `${qname(c.col)} ${opSql(c.op)} $${n++}${cast}`;
-    });
-    where.push(`(${conds.join(' AND ')})`);
+  /* or= : ny coma dia OR (semantik Supabase), ny and(...) anatiny no AND */
+  const orGroups = parseOr(orStr);
+  if (orGroups.length) {
+    const alts = orGroups.map(group => {
+      const conds = group.map(c => {
+        let v = c.val;
+        try { v = JSON.parse(v); } catch { /* keep string */ }
+        const cast = uuidCols.has(c.col) ? '::uuid' : '';
+        params.push(typedParam(c.col, v, c.op));
+        return `${qname(c.col)} ${opSql(c.op)} $${n++}${cast}`;
+      });
+      return conds.length ? `(${conds.join(' AND ')})` : null;
+    }).filter(Boolean);
+    if (alts.length) where.push(`(${alts.join(' OR ')})`);
   }
 
   return { where: where.join(' AND '), params };
@@ -240,121 +319,127 @@ app.get('/api/auth/me', (req, res) => {
 
 app.post('/api/auth/logout', (req, res) => ok(res, {}));
 
-/* -------- Generic table API -------- */
-app.get('/api/:table', async (req, res) => {
-  const table = req.params.table;
-  const { filters, or, order, limit, single } = req.query;
-  const f = filters ? (Array.isArray(filters) ? filters.flatMap(x => x.split(';;')) : String(filters).split(';;')) : [];
-  const parsed = f.map(s => {
-    const idx = s.indexOf('|', s.indexOf('|') + 1);
-    const col = s.slice(0, s.indexOf('|'));
-    const rest = s.slice(s.indexOf('|') + 1);
-    const op = rest.slice(0, rest.indexOf('|'));
-    const val = rest.slice(rest.indexOf('|') + 1);
-    return { col, op, val };
-  });
+/* -------- Auth obligatoire (tsy afaka miditra ny public) -------- */
+app.use('/api', (req, res, next) => {
+  if (req.path.startsWith('/auth/')) return next();
+  const u = authUser(req);
+  if (!u) return fail(res, 401, 'Tsy connecté');
+  req.user = u;
+  next();
+});
 
-  const { where, params } = buildWhere(parsed, or, 1, table === 'payments' ? 'p' : null);
+/* -------- Generic table API -------- */
+app.get('/api/:table', wrap(async (req, res) => {
+  const table = req.params.table;
+  await assertTable(table);
+  const { filters, or, order, limit, single } = req.query;
+  const parsed = parseFilters(filters);
+  await assertCols(table, parsed.map(f => f.col));
+  await assertCols(table, parseOr(or).flat().map(c => c.col));
+
+  const pfx = table === 'payments' ? 'p' : null;
+  const { where, params } = buildWhere(parsed, or, 1, pfx);
+
   let orderSql = '';
   if (order) {
-    const parts = Array.isArray(order) ? order : [order];
-    orderSql = parts.map(o => {
-      const [col, dir] = o.split(':');
-      const q = table === 'payments' ? `p.${col}` : col;
-      return `${q} ${dir === 'desc' ? 'DESC' : 'ASC'}`;
-    }).join(', ');
+    const parts = (Array.isArray(order) ? order : [order]).map(String);
+    await assertCols(table, parts.map(o => o.split(':')[0]));
+    orderSql = parts
+      .map(o => {
+        const [col, dir] = o.split(':');
+        return `${pfx ? pfx + '.' : ''}${col} ${dir === 'desc' ? 'DESC' : 'ASC'}`;
+      })
+      .join(', ');
   }
-  let sql = `select * from ${table}`;
+
+  let sql = table === 'payments'
+    ? 'select p.*, row_to_json(pr) as _profile from payments p left join profiles pr on pr.id = p.user_id'
+    : `select * from ${table}`;
   if (where) sql += ` where ${where}`;
   if (orderSql) sql += ` order by ${orderSql}`;
-  if (limit) sql += ` limit ${Number(limit)}`;
+  const lim = clampLimit(limit);
+  if (lim) sql += ` limit ${lim}`;
 
-  let rows;
+  let rows = (await pool.query(sql, params)).rows;
   if (table === 'payments') {
-    const joins = `select p.*, row_to_json(pr) as _profile
-      from payments p left join profiles pr on pr.id = p.user_id`;
-    sql = sql.replace('select * from payments', joins);
-    const r = await pool.query(sql, params);
-    rows = r.rows.map(x => ({
-      ...x,
+    rows = rows.map(x => ({
+      ...scrub(x),
       profiles: { first_name: x._profile?.first_name, last_name: x._profile?.last_name }
     }));
     rows.forEach(x => { delete x._profile; });
   } else {
-    rows = (await pool.query(sql, params)).rows;
+    rows = rows.map(scrub);
   }
 
-  if (single === '1' || single === 'true') return ok(res, rows[0] ?? null);
+  if (single === '1' || single === 'true') return ok(res, scrub(rows[0] ?? null));
   ok(res, rows);
-});
+}));
 
-app.post('/api/:table', async (req, res) => {
+app.post('/api/:table', wrap(async (req, res) => {
   const table = req.params.table;
+  await assertTable(table);
   const rows = Array.isArray(req.body) ? req.body : [req.body];
   const out = [];
   for (const row of rows) {
     const keys = Object.keys(row).filter(k => k !== 'id');
+    await assertCols(table, keys.concat('id'));
     const cols = ['id'].concat(keys);
     const vals = [row.id || crypto.randomUUID()].concat(keys.map(k => row[k]));
     const qs = cols.map((c, i) => `$${i + 1}`).join(', ');
-    const r = await pool.query(`insert into ${table} (${cols.join(', ')}) values (${qs}) returning *`, vals);
-    out.push(r.rows[0]);
+    const r = await pool.query(
+      `insert into ${table} (${cols.join(', ')}) values (${qs}) returning *`, vals
+    );
+    out.push(scrub(r.rows[0]));
   }
   ok(res, out);
-});
+}));
 
-app.post('/api/:table/upsert', async (req, res) => {
+app.post('/api/:table/upsert', wrap(async (req, res) => {
   const table = req.params.table;
+  await assertTable(table);
   const row = req.body;
   if (!row?.id) return fail(res, 400, 'id ilaina ho an\'ny upsert');
+  await assertCols(table, Object.keys(row));
 
   const existing = await pool.query(`select * from ${table} where id = $1`, [row.id]);
   if (existing.rowCount > 0) {
     const keys = Object.keys(row).filter(k => k !== 'id');
-    if (keys.length === 0) return ok(res, existing.rows[0]);
+    if (keys.length === 0) return ok(res, scrub(existing.rows[0]));
     const setSql = keys.map((k, i) => `${k} = $${i + 1}`).join(', ');
     const r = await pool.query(
       `update ${table} set ${setSql} where id = $${keys.length + 1} returning *`,
       keys.map(k => row[k]).concat([row.id])
     );
-    ok(res, r.rows[0]);
-  } else {
-    const keys = Object.keys(row);
-    const qs = keys.map((k, i) => `$${i + 1}`).join(', ');
-    const r = await pool.query(
-      `insert into ${table} (${keys.join(', ')}) values (${qs}) returning *`,
-      keys.map(k => row[k])
-    );
-    ok(res, r.rows[0]);
+    return ok(res, scrub(r.rows[0]));
   }
-});
+  const keys = Object.keys(row);
+  const qs = keys.map((k, i) => `$${i + 1}`).join(', ');
+  const r = await pool.query(
+    `insert into ${table} (${keys.join(', ')}) values (${qs}) returning *`,
+    keys.map(k => row[k])
+  );
+  ok(res, scrub(r.rows[0]));
+}));
 
-app.patch('/api/:table', async (req, res) => {
+app.patch('/api/:table', wrap(async (req, res) => {
   const table = req.params.table;
+  await assertTable(table);
   const { filters, or } = req.query;
-  const f = filters ? (Array.isArray(filters) ? filters.flatMap(x => x.split(';;')) : String(filters).split(';;')) : [];
-  const parsed = f.map(s => {
-    const first = s.indexOf('|');
-    const col = s.slice(0, first);
-    const rest = s.slice(first + 1);
-    const second = rest.indexOf('|');
-    const op = rest.slice(0, second);
-    const val = rest.slice(second + 1);
-    return { col, op, val };
-  });
+  const parsed = parseFilters(filters);
+  await assertCols(table, parsed.map(f => f.col));
+  await assertCols(table, parseOr(or).flat().map(c => c.col));
 
   const body = req.body || {};
   const keys = Object.keys(body).filter(k => k !== 'id');
+  await assertCols(table, keys);
   if (keys.length === 0) return ok(res, null);
 
   const { where, params } = buildWhere(parsed, or, keys.length + 1);
   if (!where) return fail(res, 400, 'Filtre ilaina ho an\'ny update');
 
-  if (table === 'messages') {
-    if (body.read === true || body.read === 'true') {
-      body.seen_at = new Date().toISOString();
-      body.is_seen = true;
-    }
+  if (table === 'messages' && (body.read === true || body.read === 'true')) {
+    body.seen_at = new Date().toISOString();
+    body.is_seen = true;
   }
 
   const setSql = keys.map((k, i) => `${k} = $${i + 1}`).join(', ');
@@ -362,27 +447,20 @@ app.patch('/api/:table', async (req, res) => {
     `update ${table} set ${setSql} where ${where} returning *`,
     keys.map(k => body[k]).concat(params)
   );
-  ok(res, r.rows);
-});
+  ok(res, r.rows.map(scrub));
+}));
 
-app.delete('/api/:table', async (req, res) => {
+app.delete('/api/:table', wrap(async (req, res) => {
   const table = req.params.table;
-  const { filters } = req.query;
-  const f = filters ? (Array.isArray(filters) ? filters.flatMap(x => x.split(';;')) : String(filters).split(';;')) : [];
-  const parsed = f.map(s => {
-    const first = s.indexOf('|');
-    const col = s.slice(0, first);
-    const rest = s.slice(first + 1);
-    const second = rest.indexOf('|');
-    const op = rest.slice(0, second);
-    const val = rest.slice(second + 1);
-    return { col, op, val };
-  });
-  const { where, params } = buildWhere(parsed);
+  await assertTable(table);
+  const parsed = parseFilters(req.query.filters);
+  await assertCols(table, parsed.map(f => f.col));
+  await assertCols(table, parseOr(req.query.or).flat().map(c => c.col));
+  const { where, params } = buildWhere(parsed, req.query.or);
   if (!where) return fail(res, 400, 'Filtre ilaina');
   await pool.query(`delete from ${table} where ${where}`, params);
   ok(res, null);
-});
+}));
 
 /* -------- RPC -------- */
 app.post('/api/rpc/:name', async (req, res) => {
@@ -396,24 +474,26 @@ app.post('/api/rpc/:name', async (req, res) => {
 });
 
 /* -------- Storage -------- */
-app.post('/api/storage/:bucket', async (req, res) => {
+app.post('/api/storage/:bucket', wrap(async (req, res) => {
   const bucket = req.params.bucket;
+  if (!ALLOWED_BUCKETS.has(bucket)) return fail(res, 404, 'Bucket tsy fantatra');
   const filePath = String(req.query.path || crypto.randomUUID());
   const safe = path.normalize(filePath).replace(/^(\.\.(\/|\\|$))+/, '');
   const dest = path.join(uploadsDir, bucket, safe);
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.writeFileSync(dest, req.body);
   ok(res, { id: safe, path: safe, publicUrl: `${APP_URL}/files/${bucket}/${safe}` });
-});
+}));
 
-app.delete('/api/storage/:bucket', async (req, res) => {
+app.delete('/api/storage/:bucket', wrap(async (req, res) => {
   const bucket = req.params.bucket;
+  if (!ALLOWED_BUCKETS.has(bucket)) return fail(res, 404, 'Bucket tsy fantatra');
   const filePath = String(req.query.path || '');
   const safe = path.normalize(filePath).replace(/^(\.\.(\/|\\|$))+/, '');
   const dest = path.join(uploadsDir, bucket, safe);
   fs.rmSync(dest, { force: true });
   ok(res, null);
-});
+}));
 
 /* -------- AI exercises -------- */
 app.post('/api/ai/exercises', async (req, res) => {
@@ -487,7 +567,8 @@ function fallbackExercises(level, mode, lang) {
 
 app.use(function errHandler(err, req, res, next) {
   console.error(err);
-  if (!res.headersSent) fail(res, 500, err.message);
+  const code = err && err.status ? err.status : 500;
+  if (!res.headersSent) fail(res, code, code === 500 ? 'Server error' : err.message);
 });
 
 /* ============================================================
